@@ -45,7 +45,7 @@ int main (int argc, char *argv[]) {
 
         //Step3: unmask - file privileges to read and write
         umask(0);
-	printf("got here\n");
+
         //Step4: Change file directory
         if (chdir("/") < 0) {
             exit(EXIT_FAILURE);

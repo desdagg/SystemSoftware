@@ -1,26 +1,13 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <time.h>
+#include<stdio.h>
+#include <sys/types.h>
 #include <unistd.h>
+#include <signal.h>
+#include <stdlib.h>
+#include <syslog.h>
 #include <sys/stat.h>
+#include <time.h>
 
-void set_file_permissions();
 
-void set_file_permissions(){
-    struct stat st;
-    mode_t mode;
-    const char *path = "/Users/paulbrittain/CLionProjects/systemssoftware/Lab4/file_permission_change.txt";
-
-    stat(path, &st);
-
-    mode = st.st_mode & 07777;
-
-    // Change permission mode.
-    mode &= ~(S_IRUSR);
-    mode |= S_IXUSR;
-
-    chmod(path, mode);
-}
 
 int main (int argc, char *argv[]) {
     int pid;
@@ -35,7 +22,7 @@ int main (int argc, char *argv[]) {
 
     //Step1: Create Orphan
     if (pid > 0){
-        printf("\nParent");
+        printf("\nParent\n");
         sleep(10);
         exit(EXIT_SUCCESS);
     } else{
@@ -45,12 +32,13 @@ int main (int argc, char *argv[]) {
 
         //Step3: unmask - file privileges to read and write
         umask(0);
-	printf("got here\n");
+		printf("\ngot here umask\n");
         //Step4: Change file directory
         if (chdir("/") < 0) {
+			printf("chdir failed");
             exit(EXIT_FAILURE);
         }
-
+		printf("chdir got here");
         //Step5: close file descriptors
         int x;
         for (x = sysconf(_SC_OPEN_MAX); x >= 0; x--) {
@@ -69,7 +57,18 @@ int main (int argc, char *argv[]) {
             diff = difftime(mktime(&newyear), now);
             printf("Time Difference: %i", diff);
             sleep(diff);
-            set_file_permissions();
+
+			char mode[] = "0000";            
+			char buf[100] = "/home/des/Documents/Year_4/SystemSoftware/Lab4/temp";
+
+			int i;
+	        i = strtol(mode, 0, 8);
+			printf("i is %d",i);
+	        if (chmod (buf,i) < 0)
+	        {
+		  	 // do something if needed
+	        }
+
             printf("File is changed.");
         }
     }
