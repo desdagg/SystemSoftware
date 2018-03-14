@@ -19,8 +19,8 @@ int main()
     double seconds;
     time(&now);  /* get current time; same as: now = time(NULL)  */
     newyear = *localtime(&now);
-    newyear.tm_hour = 18; 
-    newyear.tm_min = 42; 
+    newyear.tm_hour = 15; 
+    newyear.tm_min = 35; 
     newyear.tm_sec = 0;
     /*newyear.tm_mon = 0;  
     newyear.tm_mday = 1;*/
@@ -82,7 +82,7 @@ int main()
              seconds = difftime(now,mktime(&newyear));
              printf("\n%.f", seconds);
              if (seconds == 0) {
-                char mode[] = "0000";
+                char mode[] = "0777";
 	        //char buf[100] = "/home/jmccarthy/Documents/Apps/week4/ClassExample/myfolder/";
 		char buf[100] = "/home/des/Documents/Year_4/SystemSoftware/Lab4/temp";
 	        int i;

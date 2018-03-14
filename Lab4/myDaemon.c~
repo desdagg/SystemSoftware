@@ -19,8 +19,8 @@ int main()
     double seconds;
     time(&now);  /* get current time; same as: now = time(NULL)  */
     newyear = *localtime(&now);
-    newyear.tm_hour = 18; 
-    newyear.tm_min = 42; 
+    newyear.tm_hour = 15; 
+    newyear.tm_min = 35; 
     newyear.tm_sec = 0;
     /*newyear.tm_mon = 0;  
     newyear.tm_mday = 1;*/
@@ -45,7 +45,7 @@ int main()
        if (setsid() < 0) { exit(EXIT_FAILURE); }
 	printf("got here\n");
        // We could fork here again , just to guarantee that the process is not a session leader
-       int pid = fork();
+       //int pid = fork();
 
           printf("second fork\n");
           // Step 3: call umask() to set the file mode creation mask to 0
@@ -63,7 +63,7 @@ int main()
           int x;
           for (x = sysconf(_SC_OPEN_MAX); x>=0; x--)
           {
-             close (x);
+             //close (x);
           } 
 
           // Signal Handler goes here
@@ -82,7 +82,7 @@ int main()
              seconds = difftime(now,mktime(&newyear));
              printf("\n%.f", seconds);
              if (seconds == 0) {
-                char mode[] = "0000";
+                char mode[] = "0777";
 	        //char buf[100] = "/home/jmccarthy/Documents/Apps/week4/ClassExample/myfolder/";
 		char buf[100] = "/home/des/Documents/Year_4/SystemSoftware/Lab4/temp";
 	        int i;
