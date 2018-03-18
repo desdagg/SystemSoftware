@@ -1,0 +1,29 @@
+CC   = gcc
+
+LIBS = -lm -lrt
+
+OBJS = myDaemon.o updateSite.o reportUtil.o backupSite.o
+
+HEADERS = updateSite.h reportUtil.h globals.h backupSite.h
+
+myprog : $(OBJS)
+	$(CC) -o siteDaemon $(OBJS) -lm
+
+myDaemon.o : myDaemon.c $(HEADERS)
+	$(CC) -c myDaemon.c
+
+reportUtil.o : reportUtil.c
+	$(CC) -c reportUtil.c
+
+timeUtil.o : timeUtil.c
+	$(CC) -c timeUtil.c
+
+updateSite.o : updateSite.c
+	$(CC) -c updateSite.c
+
+backupSite.o : backupSite.c
+	$(CC) -c backupSite.c
+
+
+clean:
+	rm siteDaemon $(OBJS)
