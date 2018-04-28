@@ -23,21 +23,21 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName) {
 int execute(char *sql) {
   int rc;
   char *zErrMsg = 0;
-  fprintf(stdout, "SQL : %s \n", sql);
+  fprintf(stdout, "[DB] SQL : %s \n", sql);
   /* Execute SQL statement */
    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
    
    if( rc != SQLITE_OK ){
-     fprintf(stderr, "SQL error: %s %d\n", zErrMsg , rc);
+      fprintf(stderr, "SQL error: %s %d\n", zErrMsg , rc);
       sqlite3_free(zErrMsg);
    } else {
-      fprintf(stdout, "Operation successful\n");
+      fprintf(stdout, "[DB] Operation successful\n");
    }
 }
   
 int createUserTable(int fd){
   char *sql;
-    /* Create SQL statement */
+  /* Create SQL statement */
    sql = "CREATE TABLE USERS("  \
          "ID INT PRIMARY KEY     NOT NULL," \
          "NAME           TEXT    NOT NULL," \
@@ -79,7 +79,7 @@ int connectToDb(){
       fprintf(stderr, "Can't open database: %s\n", sqlite3_errmsg(db));
       return(0);
    } else {
-      fprintf(stdout, "Opened database successfully\n");
+      fprintf(stdout, "[DB] Opened database successfully\n");
    }
    return result;
 }
@@ -108,7 +108,7 @@ void init(){
   sqlite3_busy_timeout(db,600);
 
   if (doesExist(checkTableSql)){    
-    fprintf(stdout, "USERS Table Exists\n");
+    fprintf(stdout, "[DB] USERS Table Exists\n");
   }else {
      fprintf(stdout, "USERS Table Does not Exist\n");
       //  Create the USERS database table
@@ -117,7 +117,7 @@ void init(){
      addUsers();
   }
   if (doesExist(checkLogTableSql)){
-    fprintf(stdout, "Logs Table Exists\n");
+    fprintf(stdout, "[DB] LOGS Table Exists\n");
   }else {
     fprintf(stdout, "LOGS Table Does not Exist");
     createLogTable(rc);
@@ -158,8 +158,6 @@ time_t current_time;
     (void) fprintf(stderr, "*TIME* Failure to convert the time \n" );
   }
 
- 
-
     //get date as string
     strcpy(sql, "INSERT INTO LOGS (USER,FILE_CHANGED,DATE) VALUES('");
     strcat(sql, *userName);
@@ -168,62 +166,11 @@ time_t current_time;
     strcat(sql, "','");
     strcat(sql, c_time_string);
     strcat(sql, "');");
-    printf("Insert Log :: %s\n", sql);
     execute(sql);
   
 }
-
-/*int getDateTime(char **currentDate){
-  *currentDate = malloc(150);
-  time_t current_time;
-  char *c_time_string;
-
-  current_time = time(NULL);
-
-  if(current_time == ((time_t)-1)){
-    (void) fprintf(stderr, "*TIME* Failure to obtain the current time\n");
-    return 0;
-  }
-
-  c_time_string = ctime(&current_time);
-
-  if (c_time_string == NULL){
-    (void) fprintf(stderr, "*TIME* Failure to convert the time \n" );
-  }
-
-  strcpy(*currentDate, c_time_string);
-  return 1;
-
-}*/
 
 void shutdownDB(){
    sqlite3_close(db);
 }
 
-
-
-/*
-
-int main(int argc, char* argv[]) {
-  // sqlite3 *db;
-   char *zErrMsg = 0;
-   int rc;
-   char *sql;
-   init();
-   //rc = connectToDb();
-   //createUserTable(rc);
-   if (authenticate("steven","pass1")){
-      fprintf(stdout, "User Exists\n");
-   } else {
-    fprintf(stdout, "User Does not Exist\n");
-   }
-
-  
-
-
-   
-   sqlite3_close(db);
-   
-   return 0;
-}
-*/
